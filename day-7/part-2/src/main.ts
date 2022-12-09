@@ -26,6 +26,7 @@ export function walk(lines: string[]): void {
     }
   }
   console.log("Total = ", total);
+  console.log(stack)
 }
 
 walk(input);
