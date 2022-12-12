@@ -1,12 +1,3 @@
-export const lines = `R 4
-U 4
-L 3
-D 1
-R 4
-D 1
-L 5
-R 2`.split("\n");
-
 import { input } from "./input";
 
 export type Head = {
@@ -42,15 +33,15 @@ const tail: Tail = {
 
 const visible = new Set();
 
-function touch(x1: number, y1: number, x2: number, y2: number): boolean {
-  return Math.abs(x1 - x2) <= 1 && Math.abs(y1 - y2) <= 1;
+function touch(head: Head, tail: Tail): boolean {
+  return Math.abs(head.x - tail.x) <= 1 && Math.abs(head.y - tail.y) <= 1;
 }
 
 function move(direction: number[]): void {
   const [dx, dy] = [...direction];
   head.x += dx;
   head.y += dy;
-  if (!touch(head.x, head.y, tail.x, tail.y)) {
+  if (!touch(head, tail)) {
     const x =
       head.x === tail.x ? 0 : (head.x - tail.x) / Math.abs(head.x - tail.x);
     const y =
@@ -61,19 +52,23 @@ function move(direction: number[]): void {
   }
 }
 
-for (const line of input) {
-  const [direction, steps] = line.split(" ");
+export function rope(input: string[]): number {
+  for (const line of input) {
+    const [direction, steps] = line.split(" ");
 
-  if (
-    direction === "U" ||
-    direction === "D" ||
-    direction === "L" ||
-    direction === "R"
-  ) {
-    for (let i = 0; i < Number(steps); i++) {
-      move(D[direction]);
+    if (
+      direction === "U" ||
+      direction === "D" ||
+      direction === "L" ||
+      direction === "R"
+    ) {
+      for (let i = 0; i < Number(steps); i++) {
+        move(D[direction]);
+      }
     }
   }
+  return visible.size;
 }
 
-console.log(visible.size);
+const size = rope(input);
+console.log(size);
